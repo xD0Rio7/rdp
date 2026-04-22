@@ -1,4 +1,4 @@
-name: Windows RDP
+name: Windows RDP (Playit - no new user)
 
 on: [workflow_dispatch]
 
@@ -7,21 +7,23 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Download Ngrok
+    - name: Download Playit
       run: |
-        Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
-        Expand-Archive ngrok.zip
-
-    - name: Setup Ngrok Auth
-      run: .\ngrok\ngrok.exe authtoken 3Ci7aHNpDLky63uRb4buLFSxPNV_34PsL7X1AXjetncKE53vC
+        Invoke-WebRequest https://github.com/playit-cloud/playit-agent/releases/latest/download/playit-windows-amd64.exe -OutFile playit.exe
 
     - name: Enable RDP
       run: |
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-    - name: Set Password
-      run: net user runneradmin P@ssw0rd123
+    - name: Set Password for runneradmin
+      run: |
+        net user runneradmin P@ssw0rd123
 
-    - name: Start Ngrok Tunnel
-      run: .\ngrok\ngrok.exe tcp 3389
+    - name: Start Playit Tunnel
+      run: |
+        Start-Process -NoNewWindow -FilePath ".\playit.exe"
+
+    - name: Keep Alive
+      run: |
+        while ($true) { Start-Sleep -Seconds 60 }
