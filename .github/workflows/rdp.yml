@@ -9,7 +9,9 @@ jobs:
     steps:
     - name: Download Playit
       run: |
-        Invoke-WebRequest "https://github.com/playit-cloud/playit-agent/releases/download/v0.15.26/playit-windows-amd64.exe" -OutFile playit.exe
+        $release = Invoke-RestMethod -Uri "https://api.github.com/repos/playit-cloud/playit-agent/releases/latest"
+        $asset = $release.assets | Where-Object { $_.name -like "*windows-amd64.exe" }
+        Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "playit.exe"
     - name: Enable RDP
       run: |
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
