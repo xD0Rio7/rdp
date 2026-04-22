@@ -14,13 +14,14 @@ jobs:
         $asset = $release.assets | Where-Object {
             $_.name -like "*windows*" -and $_.name -like "*.exe"
         } | Select-Object -First 1
-        
+
         if (-not $asset) {
             Write-Host "No Windows exe found"
             exit 1
         }
-        
+
         Invoke-WebRequest -Uri $asset.browser_download_url -OutFile "playit.exe"
+
     - name: Enable RDP
       run: |
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
@@ -30,9 +31,9 @@ jobs:
       run: |
         net user runneradmin P@ssw0rd123
 
-    - name: Start Playit Tunnel
+    - name: Start Playit Tunnel (VISIBLE OUTPUT)
       run: |
-        Start-Process -NoNewWindow -FilePath ".\playit.exe"
+        .\playit.exe
 
     - name: Keep Alive
       run: |
