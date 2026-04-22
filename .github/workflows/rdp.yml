@@ -9,7 +9,7 @@ jobs:
     steps:
     - name: Download Playit
       run: |
-        Invoke-WebRequest ` https://github.com/playit-cloud/playit-agent/releases/download/v0.15.26/playit-windows-amd64.exe ` -OutFile playit.exe
+        Invoke-WebRequest "https://github.com/playit-cloud/playit-agent/releases/download/v0.15.26/playit-windows-amd64.exe" -OutFile playit.exe
     - name: Enable RDP
       run: |
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
