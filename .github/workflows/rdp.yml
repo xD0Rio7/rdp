@@ -1,4 +1,4 @@
-name: Windows RDP (Playit - no new user)
+name: Windows RDP (Playit - stable)
 
 on: [workflow_dispatch]
 
@@ -27,13 +27,13 @@ jobs:
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-    - name: Set Password for runneradmin
+    - name: Set Password (runneradmin)
       run: |
         net user runneradmin P@ssw0rd123
 
-    - name: Start Playit Tunnel (VISIBLE OUTPUT)
+    - name: Start Playit (foreground)
       run: |
-        .\playit.exe
+        Start-Process ".\playit.exe" -NoNewWindow -Wait
 
     - name: Keep Alive
       run: |
